@@ -7,7 +7,8 @@ const blogs = [
         blogDate: "September 4th,2020",
         blogUpdateDate: "July 10th, 2021",
         blogContent: "The effect of accidents",
-        blogLike:"10"
+        blogLike: "10",
+        blogUnlike: "2"
     },
     {
         blogTitle: "Traffic lights",
@@ -15,7 +16,8 @@ const blogs = [
         blogDate: "October 15,2020",
         blogUpdateDate: "May 10th, 2021",
         blogContent: "Disobedience of traffic rules.",
-        blogLike: "10"
+        blogLike: "10",
+        blogUnlike: "2"
     },
 ];
 
@@ -26,8 +28,9 @@ blogAuthor: String!
 blogDate: String!
 blogContent: String
 blogUpdateDate: String
+blogLike: Int
+blogUnlike: Int
 Comments: [Comment]
-Likes: [Like]
 }
 
 type Query{
@@ -47,19 +50,11 @@ blogTitle: String!,
 blogContent: String!
 }
 
-type Like{
-blogTitle: String!,
-blogLike: Int!
-}
-
 type Subscription{
 blogTitle: String!,
 addComment(blogTitle: String!, blogAuthor: String!, blogContent: String): Comment
 deleteComment(blogTitle: String!, blogContent: String!, blogAuthor: String): Comment
 replyComment(blogTitle: String!, blogContent: String): Comment
-
-blogLike(blogTitle: String!, blogContent: String!, blogAuthor): Like
-blogUnlike(blogTitle: String!, blogContent: String!, blogAuthor): Like
 }
 `;
 
@@ -114,18 +109,6 @@ const blogResolvers = {
             Comments.push(Comment);
             return Comment;
         },
-        blogLike: (parent, args) => {
-            const { blogTitle, blogContent, blogAuthor } = args;
-            const Likes = { blogTitle, blogContent, blogAuthor };
-            Likes.push(Like);
-            return Like;
-        },
-        blogUnlike: (parent, args) => {
-            const { blogTitle, blogContent, blogAuthor } = args;
-            const Likes = { blogTitle, blogContent, blogAuthor };
-            Likes.push(Like);
-            return Like;
-        }
     },
 }
 
