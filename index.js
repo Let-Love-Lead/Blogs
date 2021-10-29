@@ -6,14 +6,16 @@ const blogs = [
         blogAuthor: "Godfred Gyasi",
         blogDate: "September 4th,2020",
         blogUpdateDate: "July 10th, 2021",
-        blogContent: "The effect of accidents"
+        blogContent: "The effect of accidents",
+        blogLike:"10"
     },
     {
         blogTitle: "Traffic lights",
         blogAuthor: "Godwin Dotse",
         blogDate: "October 15,2020",
         blogUpdateDate: "May 10th, 2021",
-        blogContent: "Disobedience of traffic rules."
+        blogContent: "Disobedience of traffic rules.",
+        blogLike: "10"
     },
 ];
 
@@ -25,6 +27,7 @@ blogDate: String!
 blogContent: String
 blogUpdateDate: String
 Comments: [Comment]
+Likes: [Like]
 }
 
 type Query{
@@ -44,10 +47,19 @@ blogTitle: String!,
 blogContent: String!
 }
 
+type Like{
+blogTitle: String!,
+blogLike: Int!
+}
+
 type Subscription{
 blogTitle: String!,
 addComment(blogTitle: String!, blogAuthor: String!, blogContent: String): Comment
 deleteComment(blogTitle: String!, blogContent: String!, blogAuthor: String): Comment
+replyComment(blogTitle: String!, blogContent: String): Comment
+
+blogLike(blogTitle: String!, blogContent: String!, blogAuthor): Like
+blogUnlike(blogTitle: String!, blogContent: String!, blogAuthor): Like
 }
 `;
 
@@ -84,12 +96,36 @@ const blogResolvers = {
         },
     },
     Subscription: {
+        addComment: (parent, args) => {
+            const { blogTitle, blogContent, blogDate, blogAuthor } = args;
+            const Comments = { blogTitle, blogContent, blogDate, blogAuthor };
+            Comments.push(Comment);
+            return Comment;
+        },
         deleteComment: (parent, args) => {
             const { blogTitle, blogContent, blogDate, blogAuthor } = args;
             const Comments = { blogTitle, blogContent, blogDate, blogAuthor };
             Comments.push(Comment);
             return Comment;
         },
+        replyComment: (parent, args) => {
+            const { blogTitle, blogContent, blogDate, blogAuthor } = args;
+            const Comments = { blogTitle, blogContent, blogDate, blogAuthor };
+            Comments.push(Comment);
+            return Comment;
+        },
+        blogLike: (parent, args) => {
+            const { blogTitle, blogContent, blogAuthor } = args;
+            const Likes = { blogTitle, blogContent, blogAuthor };
+            Likes.push(Like);
+            return Like;
+        },
+        blogUnlike: (parent, args) => {
+            const { blogTitle, blogContent, blogAuthor } = args;
+            const Likes = { blogTitle, blogContent, blogAuthor };
+            Likes.push(Like);
+            return Like;
+        }
     },
 }
 
